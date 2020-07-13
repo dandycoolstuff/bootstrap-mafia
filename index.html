@@ -1,0 +1,163 @@
+
+
+<!DOCTYPE html>
+<html>
+<!-- Login with Gmail 
+https://blog.logrocket.com/user-authentication-firebase-react-apps/
+*/ -->
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="google-signin-client_id" content="mafia-331bb.firebaseapp.com">
+
+
+    <title>Collapsible sidebar using Bootstrap 4</title>
+
+    <!-- Bootstrap CSS CDN -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4" crossorigin="anonymous">
+    <!-- Our Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+    <script src="https://www.gstatic.com/firebasejs/5.0.0/firebase.js"></script>
+
+    <!-- Font Awesome JS -->
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/solid.js" integrity="sha384-tzzSw1/Vo+0N5UhStP3bvwWPq+uvzCMfrN1fEFe+xBmv1C/AtVX5K0uZtmcHitFZ" crossorigin="anonymous"></script>
+    <script defer src="https://use.fontawesome.com/releases/v5.0.13/js/fontawesome.js" integrity="sha384-6OIrr52G08NpOFSZdxxz1xdNSndlD4vdcf/q2myIUVO0VsqaGHJsB0RaBE01VTOY" crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+<div class="wrapper">
+    <!-- Sidebar -->
+    <nav id="sidebar">
+        <div class="sidebar-header">
+            <h3>Let's play Mafia</h3>
+        </div>
+
+        <ul class="list-unstyled components">
+            <li>
+                <a href="#" onclick="createRoom();">Create Room</a>
+
+            </li>
+            <li>
+                <a href="#" onclick="joinRoom();" >Join Room</a>
+            </li>
+                        <li>
+                <a href="#" onclick="startGame();">Start Game</a>
+            </li>
+            <li>
+                <a href="#" onclick="signOut();">Leave Room</a>
+            </li>
+
+        </ul>
+        <ul class="list-unstyled components">
+            <li class="active">
+                <a href="#homeSubmenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">Room : RoomName</a>
+                <ul class="collapse list-unstyled" id="homeSubmenu">
+                    <li>
+                        <a href="#">Player 1</a>       
+                    </li>
+                    <li>
+                        <a href="#">Player 2</a>
+                    </li>
+                    <li>
+                        <a href="#">Player 3</a>
+                    </li>
+                <button type="button" class="btn btn-success">Vote</button>
+            </ul>
+
+            </li>
+        </ul>
+
+
+
+
+    </nav>
+        <section id="add-room-module" class="pop-up " >
+        <form>
+            <h4>Create Room</h4>
+            Room Name:<br>
+            <input type='text' id='room-name' class='room-input'><br>
+            Moderator Name:<br>
+            <input type='text' id='moderator-name' class='room-input'><br>
+            <button type='button' id="add-room-btn">Create Room</button>
+        </form>
+    </section>
+
+        <section id="add-player-module" class="pop-up">
+        <form>
+            <h4>Join Room</h4>
+            Room Name:<br>
+            <input type='text' data-key='room_name' class='user-input'><br>
+            Player Name:<br>
+            <input type='text' data-key='player_name' class='user-input'><br>
+            <button type='button' id="add-player-btn" onClick="add-player-btn-clicked();">Join Room</button>
+        </form>
+    </section>
+
+            <section id="game-module" class="pop-up">
+            <h4>Game in Play</h4>
+            Room Name:<br>
+           
+            Player Name:<br>
+               </section>
+
+
+</div>
+
+            
+<div class="g-signin2" data-onsuccess="onSignIn"></div>
+         
+
+
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+
+    <!-- jQuery CDN - Slim version (=without AJAX) -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <!-- Popper.JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ" crossorigin="anonymous"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm" crossorigin="anonymous"></script>
+<script src="script.js"></script>
+<script>
+
+
+function createRoom()
+{
+  $('.pop-up').css({"display": "none"});
+
+  document.querySelector('#add-room-module').style.display = "block";
+}
+function joinRoom()
+{
+  $('.pop-up').css({"display": "none"});
+  document.querySelector('#add-player-module').style.display = "block"; 
+}
+function startGame()
+{
+  $('.pop-up').css({"display": "none"});
+  document.querySelector('#game-module').style.display = "block"; 
+}
+</script>
+
+<script>
+
+function onSignIn(googleUser) {
+  var profile = googleUser.getBasicProfile();
+  console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+  console.log('Name: ' + profile.getName());
+  console.log('Image URL: ' + profile.getImageUrl());
+  console.log('Email: ' + profile.getEmail()); // This is null if the 'email' scope is not present.
+}
+  function signOut() {
+    var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+      console.log('User signed out.');
+    });
+  }
+</script>
+
+
+</body>
+
+</html>
